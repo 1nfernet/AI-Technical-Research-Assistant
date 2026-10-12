@@ -38,3 +38,15 @@ def test_load_empty_document(tmp_path):
 
     with pytest.raises(ValueError, match="Document is empty"):
         load_document(str(file_path))
+
+def test_load_unicode_named_document_preserves_text(tmp_path):
+
+    file_path = tmp_path / "材料_é.txt"
+    content = "Résumé of 材料 science"
+    file_path.write_text(content, encoding="utf-8")
+
+    document = load_document(str(file_path))
+
+    assert document["doc_id"] == "材料_é.txt"
+    assert document["text"] == content
+
